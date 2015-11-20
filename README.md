@@ -12,4 +12,4 @@ Handsontable 0.17.0, ruleJS0.0.3, Underscore.js 1.8.2, TreeModel 1.0.4, font-awe
 #### Sample
 1. row add/remove : http://jsfiddle.net/tdjun/p3gp0Lny/1/
 2. header/row merge & cell formula : http://jsfiddle.net/tdjun/heo3xc04/
-3. row add/remove & header merge : http://jsfiddle.net/tdjun/gtu2vbz0/
+3. row add/remove & header merge : httphttp://jsfiddle.net/tdjun/gtu2vbz0/1/

@@ -1,0 +1,27 @@
+
+/* Header */
+.handsontable td.htMergeHeader {
+  background-color: #f6f8f8;
+  text-align: center;
+  font-weight: bold;
+  color: #58666e;
+  vertical-align: middle !important;
+}
+
+/*  htEditRow */
+.handsontable td.htEditRow{
+  text-align: center;
+  vertical-align: middle !important;
+}
+.handsontable td.htEditRow .btn {
+  border-radius: 20px;
+  padding: 1px 0 0;
+  cursor: pointer;
+  margin: 0 auto;
+  width: 20px;
+  height: 19px;
+}
+.handsontable td.htEditRow .btn:hover {
+  background-color: #777;
+  color: #FFF;
+}

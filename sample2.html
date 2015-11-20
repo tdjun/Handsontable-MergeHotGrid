@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <title>Handsontable-MergeHotGrid Sample1</title>
+
+  <link rel="stylesheet" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/handsontable/0.17.0/handsontable.full.css" type="text/css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="merge.hot.grid.css" type="text/css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handsontable/0.17.0/handsontable.full.js"></script>
+  <script src="TreeModel-min.js"></script>
+  <script src="ruleJS.all.full.min.js"></script>
+  <script src="handsontable.formula.js"></script>
+
+  <script src="merge.hot.grid.js"></script>
+  <script src="merge.hot.grid.header.js"></script>
+  <script src="merge.hot.grid.list.js"></script>
+
+  <script>
+    $(document).ready(function () {
+
+      var rowData = [
+        {"stgTypeCd":"기초","anlSeq":1,"costTypeCd":"출연금","agcCol1":250000,"agcCol2":200000},
+        {"stgTypeCd":"기초","anlSeq":1,"costTypeCd":"현금","agcCol1":139400,"agcCol2":139100},
+        {"stgTypeCd":"기초","anlSeq":1,"costTypeCd":"현물","agcCol1":600,"agcCol2":500},
+        {"stgTypeCd":"기초","anlSeq":1,"costTypeCd":"합계",formula:"subSum"},
+        {"stgTypeCd":"기초","anlSeq":2,"costTypeCd":"출연금","agcCol1":170000,"agcCol2":150000},
+        {"stgTypeCd":"기초","anlSeq":2,"costTypeCd":"현금","agcCol1":144200,"agcCol2":107000},
+        {"stgTypeCd":"기초","anlSeq":2,"costTypeCd":"현물","agcCol1":null,"agcCol2":20500},
+        {"stgTypeCd":"기초","anlSeq":2,"costTypeCd":"합계",formula:"subSum"},
+        {"stgTypeCd":"","anlSeq":"총계","costTypeCd":"합계",formula:"totalSum"}
+      ];
+
+      var colInfo = [
+        {
+          dataField:'stgTypeCd', label:'구분',
+          children: [
+            {
+              dataField:'stgTypeCd', label:'단계', width:50, readOnly: true,
+              mergeRowField:'stgTypeCd',
+              style:{textAlign:'center'},
+            },
+            {
+              dataField:'anlSeq', label:'년차', width:50, readOnly: true,
+              mergeRowField:'anlSeq',
+              style:{textAlign:'center'},
+              renderer : function(instance, td, row, col, prop, value){
+                td.innerHTML = value == '총계'? value : value + "차 년도";
+                return td;
+              }
+            },
+            {
+              dataField:'costTypeCd', label:'비용구분', width:50, readOnly: true,
+              style:{textAlign:'center'}
+            },
+          ]
+        },
+        {
+          dataField:'agcCol1', label:'삼성SDS', width:100,
+          isFormula:'formula', type:'numeric', format:'0,0',
+          style:{textAlign:'center'}
+        },
+        {
+          dataField:'agcCol2', label:'LG CNS', width:100,
+          isFormula:'formula', type:'numeric', format:'0,0',
+          style:{textAlign:'center'}
+        },
+        {
+          dataField:'colSum', label: '계', width: 80, readOnly: true,
+          isFormula:'colSum', type:'numeric', format:'0,0',
+          option: {formula: '=SUM(@agcCol1:@agcCol2)'}
+        }
+      ];
+
+      var container = document.getElementById("container");
+
+      var grid = new MergeHotGrid(colInfo, rowData, 30);
+      grid.renderHandsontable(container, {
+        stretchH:    'all',
+        fillHandle:  false,
+        contextMenu: false,
+        rowHeaders:  false,
+        colHeaders:  false,
+        formulas:    true,
+        data:           grid.initData(),
+        columns:        grid.getGridHeader().getColumns(),
+        colWidths:      grid.getGridHeader().getColWidths(),
+        mergeCells:     grid.getMergeCells(),
+        customBorders:  grid.getGridHeader().customBorders(),
+        cells:          grid.getObjCell(),
+      });
+    });
+
+  </script>
+</head>
+<body>
+
+<h3>Sample2</h3>
+<p>1. header/row merge</p>
+<p>2. cell formula </p>
+
+<div id="container"></div>
+
+</body>
+</html>

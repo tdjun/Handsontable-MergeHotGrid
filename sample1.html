@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <title>Handsontable-MergeHotGrid Sample1</title>
+
+  <link rel="stylesheet" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/handsontable/0.17.0/handsontable.full.css" type="text/css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="merge.hot.grid.css" type="text/css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handsontable/0.17.0/handsontable.full.js"></script>
+  <script src="TreeModel-min.js"></script>
+
+  <script src="merge.hot.grid.js"></script>
+  <script src="merge.hot.grid.header.js"></script>
+  <script src="merge.hot.grid.list.js"></script>
+
+  <script>
+    $(document).ready(function () {
+
+      var rowData = [
+        {pk1:'pk1_001', pk2:'pk2_001', seq:1, article:'정격출력(rated output)', prfomnc:'22.4 kW', remark:''},
+        {pk1:'pk1_001', pk2:'pk2_001', seq:2, article:'정격전압(rated voltage)', prfomnc:'28 V', remark:''},
+        {pk1:'pk1_001', pk2:'pk2_001', seq:3, article:'정격전류(rated current)', prfomnc:'700A/3,500 rpm\n800a/4,000 rpm', remark:''},
+        {pk1:'pk1_001', pk2:'pk2_001', seq:4, article:'운용속도 범위(speed range)', prfomnc:'2,500 ~ 11,000 rpm', remark:''},
+        {pk1:'pk1_001', pk2:'pk2_001', seq:5, article:'최대속도(maximum speed', prfomnc:'13,000 rpm', remark:''},
+        {pk1:'pk1_001', pk2:'pk2_001', seq:6, article:'과속도(over speed)', prfomnc:'14,000 rpm', remark:''},
+        {pk1:'pk1_001', pk2:'pk2_001', seq:7, article:'리플전압', prfomnc:'4V 이하, peak-to-peak', remark:'MIL-DTL-62186'},
+        {pk1:'pk1_001', pk2:'pk2_001', seq:8, article:'효율(efficiency)', prfomnc:'65% 이상', remark:'MIL-DTL-62186'}
+      ];
+
+      var colInfo = [
+        {width:25, headerRenderer: 'addRow', readOnly:true, addFunc:
+                function(data, selectedObj, endRow){
+                  if (selectedObj){
+                    data.splice(endRow+1, 0, {pk1: 'pk1_001', pk2: 'pk2_001'});
+                  }else{
+                    data.push({pk1: 'pk1_001', pk2: 'pk2_001'});
+                  }
+                }
+        },
+        {dataField:'article', label:'항목', width:100 },
+        {dataField:'prfomnc', label:'목표 성능', width:200 },
+        {dataField:'remark', label:'비고', width:100 },
+        {width:20, label:'삭제', readOnly:true, renderType:'removeRow'}
+      ];
+
+      var container = document.getElementById("container");
+
+      var grid = new MergeHotGrid(colInfo, rowData, 30);
+      grid.renderHandsontable(container, {
+        stretchH:    'all',
+        contextMenu: false,
+        colHeaders:  false,
+        formulas:    true,
+        data:           grid.initData(),
+        columns:        grid.getGridHeader().getColumns(),
+        colWidths:      grid.getGridHeader().getColWidths(),
+        mergeCells:     grid.getMergeCells(),
+        customBorders:  grid.getGridHeader().customBorders(),
+        cells:          grid.getObjCell(),
+      });
+    });
+
+  </script>
+</head>
+<body>
+
+<h3>Sample1</h3>
+<p>1. row add/remove</p>
+
+<div id="container"></div>
+
+</body>
+</html>

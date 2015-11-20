@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <title>Handsontable-MergeHotGrid Sample1</title>
+
+  <link rel="stylesheet" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/handsontable/0.17.0/handsontable.full.css" type="text/css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="merge.hot.grid.css" type="text/css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handsontable/0.17.0/handsontable.full.js"></script>
+  <script src="TreeModel-min.js"></script>
+
+  <script src="merge.hot.grid.js"></script>
+  <script src="merge.hot.grid.header.js"></script>
+  <script src="merge.hot.grid.list.js"></script>
+
+  <script>
+    $(document).ready(function () {
+
+      var rowData = [
+        {"reqPrjNo":"99-CM-EE-05","chgDate":"2013-12-20","mainSpec1":"정격출력","mainSpec2":22.41312,"unit":"KW","ratio": 10,"ownNatEtpr":"독일","natTopPrfomnc":"22.4","dmstBfPrfomnc":"18.2","evaType":"시험","seq":1},
+        {"reqPrjNo":"99-CM-EE-05","chgDate":"2013-12-20","mainSpec1":"정격출력","mainSpec2":22.4121,"unit":"KW","ratio": 10,"ownNatEtpr":"독일","natTopPrfomnc":"22.4","dmstBfPrfomnc":"18.2","evaType":"시험","seq":1},
+        {"reqPrjNo":"99-CM-EE-05","chgDate":"2013-12-20","mainSpec1":"정격출력","mainSpec2":22.234,"unit":"KW","ratio": 10,"ownNatEtpr":"독일","natTopPrfomnc":"22.4","dmstBfPrfomnc":"18.2","evaType":"시험","seq":2},
+        {"reqPrjNo":"99-CM-EE-05","chgDate":"2013-12-20","mainSpec1":"정격출력","mainSpec2":22.23,"unit":"KW","ratio": 10,"ownNatEtpr":"독일","natTopPrfomnc":"22.4","dmstBfPrfomnc":"18.2","evaType":"시험","seq":2}
+      ];
+
+      var colInfo = [
+        {
+          width:25, headerRenderer: 'addRow',
+          addFunc:function(data, selectedObj, endRow){
+            if (selectedObj){
+              data.splice(endRow+1, 0, {reqPrjNo:selectedObj.reqPrjNo, chgDate:selectedObj.chgDate});
+            }else{
+              selectedObj = data[data.length-1];
+              data.push({reqPrjNo:selectedObj.reqPrjNo, chgDate:selectedObj.chgDate});
+            }
+          }
+        },
+        { dataField:'mainSpec1', label:'평가항목', width:100 },
+        { dataField:'mainSpec2', label:'주요성능 Spec', width:100, type:'numeric', format:'0.[000000]' },
+        { dataField:'unit', label:'단위', width:30 },
+        { dataField:'ratio', label:'전체항목에서 차지하는 비중(%)', width:50, type:'numeric', format:'0,0.00' },
+        {
+          dataField:'ownNatEtpr', label:'세계최고수준',
+          children:[
+            {dataField:'ownNatEtpr', label:'보유국/보유기업', width:50, style:{textAlign:'center'}},
+            {
+              dataField:'natTopPrfomnc', label:'성능수준', width:50,
+              type:'numeric', format:'0,0',
+              style:{textAlign:'center'}
+            }
+          ]
+        },
+        {
+          dataField:'dmstBfPrfomnc', label:'연구개발 전 국내수준',
+          children:[
+            {dataField:'dmstBfPrfomnc', label:'성능수준', width:50, style:{textAlign:'center'}}
+          ]
+        },
+        {
+          dataField:'sub.STG001.1', label:'개발 목표치',
+          children:[
+            {
+              dataField:'sub.STG001.1', label:"기초", style:{textAlign:'center'},
+              children:[
+                {dataField:'sub.STG001.1', label:'1차', width:40, style:{textAlign:'center'}},
+                {dataField:'sub.STG001.2', label:'2차', width:40, style:{textAlign:'center'}},
+              ]
+            },
+            {
+              dataField:'sub.STG002.1', label:"응용", style:{textAlign:'center'},
+              children:[
+                {dataField:'sub.STG002.1', label:'1차', width:40, style:{textAlign:'center'}},
+                {dataField:'sub.STG002.2', label:'2차', width:40, style:{textAlign:'center'}},
+              ]
+            }
+          ]
+        },
+        {dataField:'evaType', label:'평가방법', width:100 },
+        {width:20, label:'삭제', readOnly:true, renderType:'removeRow'}
+      ];
+
+      var container = document.getElementById("container");
+
+      var grid = new MergeHotGrid(colInfo, rowData, 30);
+      grid.renderHandsontable(container, {
+        stretchH:    'all',
+        fillHandle:  false,
+        contextMenu: false,
+        colHeaders:  false,
+        data:           grid.initData(),
+        columns:        grid.getGridHeader().getColumns(),
+        colWidths:      grid.getGridHeader().getColWidths(),
+        mergeCells:     grid.getMergeCells(),
+        customBorders:  grid.getGridHeader().customBorders(),
+        cells:          grid.getObjCell(),
+      });
+    });
+
+  </script>
+</head>
+<body>
+
+<h4>Sample3</h4>
+<h3>1. row add/remove</h3>
+<h3>2. header merge</h3>
+
+<div id="container"></div>
+
+</body>
+</html>
